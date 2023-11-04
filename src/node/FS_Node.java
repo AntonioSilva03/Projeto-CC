@@ -14,6 +14,12 @@ public class FS_Node {
     private static DatagramSocket udpSocket;
     private static DataInputStream dis;
     private static DataOutputStream dos;
+
+    public static void quit() throws IOException{
+        dos.writeUTF("QUIT");
+        dos.flush();
+        System.out.println("Desconectado com sucesso");
+    }
     public static void main(String[] args) {
         try{
             tcpSocket = new Socket("localhost", Utils.DEFAULT_PORT);
@@ -37,7 +43,20 @@ public class FS_Node {
         
         boolean end = false;
         while(!end){
-            
+            int op = UI.menuPrincipal();
+            if (op == 1) {
+                
+            }
+            else if(op == 2){
+                end = true;
+                try{
+                    quit();
+                }
+                catch(IOException e)
+                {
+                    System.out.println(e.getMessage());
+                }
+            }
         }
     }
 }
