@@ -50,6 +50,7 @@ public class Handler implements Runnable {
         catch(IOException e){
             System.out.println("Cliente desconectado inesperadamente");
             manager.removeNode(clientAddress);
+            return;
         }
         System.out.println("Cliente " + clientAddress + " " + "desconectado com sucesso");
     }

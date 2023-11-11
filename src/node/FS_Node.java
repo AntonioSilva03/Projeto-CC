@@ -18,6 +18,8 @@ public class FS_Node {
     public static void quit() throws IOException{
         dos.writeUTF("QUIT");
         dos.flush();
+        tcpSocket.close();
+        udpSocket.close();
         System.out.println("Desconectado com sucesso");
     }
     public static void main(String[] args) {
@@ -40,6 +42,8 @@ public class FS_Node {
             System.out.println("Impossível conectar-se ao servidor");
             System.exit(0);
         }
+
+        Thread server = new Thread(new SeedingServer(udpSocket));
         
         boolean end = false;
         while(!end){
