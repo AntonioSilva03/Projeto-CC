@@ -11,7 +11,7 @@ public class Handler implements Runnable {
     private Manager manager;
     private DataInputStream dis;
     private DataOutputStream dos;
-    InetSocketAddress clientAddress;
+    private InetSocketAddress clientAddress;
 
     public Handler(Socket clientSocket, Manager manager) throws IOException{
         this.clientSocket = clientSocket;
@@ -21,9 +21,10 @@ public class Handler implements Runnable {
     }
 
     public void register() throws IOException{
-        int initRequest = dis.readInt();
-        clientAddress = new InetSocketAddress(clientSocket.getInetAddress(), initRequest);
-        manager.registerNode(clientAddress);
+        String[] initRequest = dis.readUTF().split(" ");
+        int portaUDP = Integer.parseInt(initRequest[0]);
+        clientAddress = new InetSocketAddress(clientSocket.getInetAddress(), portaUDP);
+        manager.registerNode(clientAddress, initRequest);
     }
 
     public void quit() throws IOException{

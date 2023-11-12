@@ -2,6 +2,7 @@ package node;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
+import java.io.File;
 import java.io.IOException;
 import java.net.DatagramSocket;
 import java.net.Socket;
@@ -15,6 +16,11 @@ public class FS_Node {
     private static DataInputStream dis;
     private static DataOutputStream dos;
 
+    public static void register() throws IOException{
+        File sharedFiles = new File("shared/");
+        dos.writeUTF(udpSocket.getLocalPort() + " " + String.join(" ", sharedFiles.list()));
+        dos.flush();
+    }
     public static void quit() throws IOException{
         dos.writeUTF("QUIT");
         dos.flush();
@@ -30,13 +36,13 @@ public class FS_Node {
             }
             catch(SocketException e){
                 System.out.println("Impossível iniciar conexão para seed");
+                tcpSocket.close();
                 System.exit(0);
             }
             dis = new DataInputStream(tcpSocket.getInputStream());
             dos = new DataOutputStream(tcpSocket.getOutputStream());
 
-            dos.writeInt(Utils.DEFAULT_PORT);
-            dos.flush();
+            register();
         }
         catch(IOException e){
             System.out.println("Impossível conectar-se ao servidor");
@@ -44,6 +50,7 @@ public class FS_Node {
         }
 
         Thread server = new Thread(new SeedingServer(udpSocket));
+        //server.start();
         
         boolean end = false;
         while(!end){
