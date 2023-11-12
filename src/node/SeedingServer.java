@@ -6,13 +6,15 @@ import java.net.DatagramSocket;
 
 public class SeedingServer implements Runnable{
     private DatagramSocket udpSocket;
+    private static boolean state;
 
     public SeedingServer(DatagramSocket udpSocket){
         this.udpSocket = udpSocket;
+        state = true;
     }
 
     public void run(){
-        while(true){
+        while(state){
             byte[] recieveData = new byte[1024];
             DatagramPacket request = new DatagramPacket(recieveData, recieveData.length);
             try{
@@ -23,5 +25,9 @@ public class SeedingServer implements Runnable{
                 System.out.println(e.getMessage());
             }
         }
+    }
+
+    public static void setState(boolean state){
+        SeedingServer.state = state;
     }
 }

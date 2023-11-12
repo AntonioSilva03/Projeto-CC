@@ -7,10 +7,12 @@ import java.io.IOException;
 import java.net.DatagramSocket;
 import java.net.Socket;
 import java.net.SocketException;
+import java.util.Random;
 
 import utils.*;
 
 public class FS_Node {
+    private static Random random = new Random();
     private static Socket tcpSocket;
     private static DatagramSocket udpSocket;
     private static DataInputStream dis;
@@ -26,6 +28,7 @@ public class FS_Node {
     public static void quit() throws IOException{
         dos.writeUTF("QUIT");
         dos.flush();
+        SeedingServer.setState(false);
         tcpSocket.close();
         udpSocket.close();
         System.out.println("Desconectado com sucesso");
@@ -34,7 +37,7 @@ public class FS_Node {
         try{
             tcpSocket = new Socket("localhost", Utils.DEFAULT_PORT);
             try{
-                udpSocket = new DatagramSocket(Utils.DEFAULT_PORT);
+                udpSocket = new DatagramSocket(Utils.DEFAULT_PORT /* +random.nextInt(101)*/); // Adiciona um número entre 1 e 100 à porta para iniciar vários nodes na mesma máquina.
             }
             catch(SocketException e){
                 System.out.println("Impossível iniciar conexão para seed");
@@ -52,7 +55,7 @@ public class FS_Node {
         }
 
         Thread server = new Thread(new SeedingServer(udpSocket));
-        //server.start();
+        server.start();
         
         boolean end = false;
         while(!end){
