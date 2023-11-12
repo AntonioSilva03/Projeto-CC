@@ -21,8 +21,8 @@ public class Handler implements Runnable {
     }
 
     public void register() throws IOException{
+        int portaUDP = dis.readInt();
         String[] initRequest = dis.readUTF().split(" ");
-        int portaUDP = Integer.parseInt(initRequest[0]);
         clientAddress = new InetSocketAddress(clientSocket.getInetAddress(), portaUDP);
         manager.registerNode(clientAddress, initRequest);
     }

@@ -18,7 +18,9 @@ public class FS_Node {
 
     public static void register() throws IOException{
         File sharedFiles = new File("shared/");
-        dos.writeUTF(udpSocket.getLocalPort() + " " + String.join(" ", sharedFiles.list()));
+        dos.writeInt(udpSocket.getLocalPort());
+        dos.flush();
+        dos.writeUTF(String.join(" ", sharedFiles.list()));
         dos.flush();
     }
     public static void quit() throws IOException{

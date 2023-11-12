@@ -15,7 +15,6 @@ public class Manager {
 
     public void registerNode(InetSocketAddress address, String[] request){
         List<String> files = new ArrayList<>(Arrays.asList(request));
-        files.remove(0);
         nodes.put(address, new Node(address, files));
     }
 

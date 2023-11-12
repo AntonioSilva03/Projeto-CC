@@ -10,5 +10,6 @@ public class Node {
     public Node(InetSocketAddress address, List<String> files){
         this.address = address;
         this.files = files;
+        System.out.println(files.toString());
     }
 }
