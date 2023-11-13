@@ -17,9 +17,10 @@ public class FS_Node {
     private static DatagramSocket udpSocket;
     private static DataInputStream dis;
     private static DataOutputStream dos;
+    private static String filepath;
 
     public static void register() throws IOException{
-        File sharedFiles = new File("shared/");
+        File sharedFiles = new File(filepath);
         dos.writeInt(udpSocket.getLocalPort());
         dos.flush();
         dos.writeUTF(String.join(" ", sharedFiles.list()));
@@ -34,8 +35,9 @@ public class FS_Node {
         System.out.println("Desconectado com sucesso");
     }
     public static void main(String[] args) {
+        filepath = args[0];
         try{
-            tcpSocket = new Socket("localhost", Utils.DEFAULT_PORT);
+            tcpSocket = new Socket("10.0.0.10", Utils.DEFAULT_PORT);
             try{
                 udpSocket = new DatagramSocket(Utils.DEFAULT_PORT /* +random.nextInt(101)*/); // Adiciona um número entre 1 e 100 à porta para iniciar vários nodes na mesma máquina.
             }
