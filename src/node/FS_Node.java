@@ -26,13 +26,25 @@ public class FS_Node {
         dos.writeUTF(String.join(" ", sharedFiles.list()));
         dos.flush();
     }
-    public static void quit() throws IOException{
-        dos.writeUTF("QUIT");
-        dos.flush();
-        SeedingServer.setState(false);
-        tcpSocket.close();
-        udpSocket.close();
-        System.out.println("Desconectado com sucesso");
+    public static void disconnect(){
+        try{
+            SeedingServer.setState(false);
+            tcpSocket.close();
+            udpSocket.close();
+        }
+        catch(IOException e){
+            e.printStackTrace();
+        }
+    }
+    public static void quit(){
+        try{
+            dos.writeUTF("QUIT");
+            dos.flush();
+            disconnect();
+        }
+        catch(IOException e){
+            System.out.println();
+        }
     }
     public static void main(String[] args) {
         filepath = args[0];
@@ -61,20 +73,21 @@ public class FS_Node {
         
         boolean end = false;
         while(!end){
+            if(!Utils.checkConnection(dos)){
+                disconnect();
+                break;
+            }
             int op = UI.menuPrincipal();
             if (op == 1) {
                 
             }
             else if(op == 2){
                 end = true;
-                try{
-                    quit();
-                }
-                catch(IOException e)
-                {
-                    System.out.println(e.getMessage());
-                }
+                quit();
+                System.out.println("Desconectado com sucesso");
+                return;
             }
         }
+        System.out.println("Conexão ao servidor perdida");
     }
 }

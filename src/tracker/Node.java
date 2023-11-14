@@ -6,9 +6,15 @@ import java.util.List;
 public class Node {
     private InetSocketAddress address;
     private List<String> files;
+    private Handler connection;
 
-    public Node(InetSocketAddress address, List<String> files){
+    public Node(InetSocketAddress address, List<String> files, Handler connection){
         this.address = address;
         this.files = files;
+        this.connection = connection;
+    }
+
+    public Handler getConnection(){
+        return this.connection;
     }
 }
