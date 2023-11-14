@@ -43,7 +43,7 @@ public class FS_Node {
             disconnect();
         }
         catch(IOException e){
-            System.out.println();
+            disconnect();
         }
     }
     public static void main(String[] args) {
