@@ -3,3 +3,18 @@
 
 ## Definição
 Um serviço peer-to-peer de transferência de ficheiros permite aos clientes transferir dados de forma mais eficiente de vários nós (seeders) transferindo partes diferentes de pacotes em paralelo.
+
+## Elementos deste repositório
+Este repositório contém:
+- Código para um servidor que vai guardar e coordenar tudo o que acontece na rede
+- Aplicação que funciona como cliente, esta vai ser a aplicação que os utilizadores vão utilizar
+- Topologia para simular uma rede onde o servidor e os clientes são testados
+## Utilização
+A topologia possui um servidor, um router e 3 nós que funcionam como clientes. A aplicação do servidor deve ser executada no servidor na topologia e a aplicação do cliente nos nós. Este servidor consegue lidar com conexões de vários clientes ao mesmo tempo.
+Os clientes tem uma pasta que vai servir como parta partilhada. Todos os ficheiros dessa pasta são públicos na rede.
+## Funcionalidades
+O cliente pode fazer download de ficheiros de outros clientes em paralelo (dependendo da quantidade de clientes que possuem o ficheiro pedido)
+Da mesma maneira outros clientes podem fazer download de blocos de ficheiros que estão na pasta partilhada. Esta pasta partilhada é enviada para o programa na execução como argumento.
+
+## Conclusão
+Trabalho realizado por Pedro Silva, António Silva e Diogo Barros.
