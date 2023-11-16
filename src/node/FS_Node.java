@@ -18,9 +18,10 @@ public class FS_Node {
     private static DataInputStream dis;
     private static DataOutputStream dos;
     private static String filepath;
+    private static File sharedFiles;
 
     public static void register() throws IOException{
-        File sharedFiles = new File(filepath);
+        sharedFiles = new File(filepath);
         dos.writeInt(udpSocket.getLocalPort());
         dos.flush();
         dos.writeUTF(String.join(" ", sharedFiles.list()));
@@ -82,6 +83,9 @@ public class FS_Node {
                 
             }
             else if(op == 2){
+                System.out.println("Ficheiros partilhados: " + String.join(" ", sharedFiles.list()) + "\n");
+            }
+            else if(op == 3){
                 end = true;
                 quit();
                 System.out.println("Desconectado com sucesso");
