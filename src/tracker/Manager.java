@@ -21,4 +21,14 @@ public class Manager {
     public void removeNode(InetSocketAddress address){
         nodes.remove(address);
     }
+
+    public List<InetSocketAddress> getNodesFile(String file){
+        List<InetSocketAddress> disponiveis = new ArrayList<>();
+        this.nodes.forEach((address, node) -> {
+            if(node.getFiles().contains(file)){
+                disponiveis.add(address);
+            }
+        });
+        return disponiveis;
+    }
 }

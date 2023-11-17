@@ -9,6 +9,10 @@ import java.net.Socket;
 import java.net.SocketException;
 import java.util.Random;
 
+import java.util.HashMap;
+import java.util.List;
+import java.net.InetSocketAddress;
+
 import utils.*;
 
 public class FS_Node {
@@ -21,6 +25,24 @@ public class FS_Node {
     private static File sharedFiles;
 
     public static void register() throws IOException{
+        try{
+            tcpSocket = new Socket("10.0.0.10", Utils.DEFAULT_PORT);
+            try{
+                udpSocket = new DatagramSocket(Utils.DEFAULT_PORT /* +random.nextInt(101)*/); // Adiciona um número entre 1 e 100 à porta para iniciar vários nodes na mesma máquina.
+            }
+            catch(SocketException e){
+                System.out.println("Impossível iniciar conexão para seed");
+                tcpSocket.close();
+                System.exit(0);
+            }
+            dis = new DataInputStream(tcpSocket.getInputStream());
+            dos = new DataOutputStream(tcpSocket.getOutputStream());
+        }
+        catch(IOException e){
+            System.out.println("Impossível conectar-se ao servidor");
+            System.exit(0);
+        }
+
         sharedFiles = new File(filepath);
         dos.writeInt(udpSocket.getLocalPort());
         dos.flush();
@@ -47,26 +69,32 @@ public class FS_Node {
             disconnect();
         }
     }
+    public static void requestDownload(String pedido){
+        List<InetSocketAddress> nodosDisponveis;
+        try{
+            dos.writeUTF("REQUEST " + pedido);
+            dos.flush();
+
+            int length = dis.readInt();
+            byte[] data = new byte[length];
+
+            dis.readFully(data);
+
+            nodosDisponveis = Utils.deserializeList(data);
+
+            System.out.println(nodosDisponveis);
+        }
+        catch(IOException | ClassNotFoundException e){
+            e.printStackTrace();
+        }
+    }
     public static void main(String[] args) {
         filepath = args[0];
         try{
-            tcpSocket = new Socket("10.0.0.10", Utils.DEFAULT_PORT);
-            try{
-                udpSocket = new DatagramSocket(Utils.DEFAULT_PORT /* +random.nextInt(101)*/); // Adiciona um número entre 1 e 100 à porta para iniciar vários nodes na mesma máquina.
-            }
-            catch(SocketException e){
-                System.out.println("Impossível iniciar conexão para seed");
-                tcpSocket.close();
-                System.exit(0);
-            }
-            dis = new DataInputStream(tcpSocket.getInputStream());
-            dos = new DataOutputStream(tcpSocket.getOutputStream());
-
             register();
         }
         catch(IOException e){
-            System.out.println("Impossível conectar-se ao servidor");
-            System.exit(0);
+            e.printStackTrace();
         }
 
         Thread server = new Thread(new SeedingServer(udpSocket));
@@ -80,7 +108,8 @@ public class FS_Node {
             }
             int op = UI.menuPrincipal();
             if (op == 1) {
-                
+                String pedido = UI.menuDownload();
+                requestDownload(pedido);
             }
             else if(op == 2){
                 System.out.println("Ficheiros partilhados: " + String.join(" ", sharedFiles.list()) + "\n");

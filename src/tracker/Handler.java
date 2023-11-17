@@ -1,10 +1,13 @@
 package tracker;
 
+import utils.Utils;
+
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.net.Socket;
+import java.util.List;
 
 public class Handler implements Runnable {
     private Socket clientSocket;
@@ -36,6 +39,20 @@ public class Handler implements Runnable {
         clientSocket.close();
     }
 
+    public void getNodes(String file){
+        List<InetSocketAddress> disponiveis = manager.getNodesFile(file);
+        try{
+            byte[] serialized = Utils.serializeList(disponiveis);
+            dos.writeInt(serialized.length);
+            dos.flush();
+            dos.write(serialized);
+            dos.flush();
+        }
+        catch(IOException e){
+            e.printStackTrace();
+        }
+    }
+
     public void run(){
         try{
             register();
@@ -46,6 +63,9 @@ public class Handler implements Runnable {
                 if(request[0].equals("QUIT")){
                     quit();
                     manager.removeNode(clientAddress);
+                }
+                else if(request[0].equals("REQUEST")){
+                    getNodes(request[1]);
                 }
             }
         }

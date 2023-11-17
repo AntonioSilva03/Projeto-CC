@@ -17,4 +17,8 @@ public class Node {
     public Handler getConnection(){
         return this.connection;
     }
+
+    public List<String> getFiles(){
+        return this.files;
+    }
 }
