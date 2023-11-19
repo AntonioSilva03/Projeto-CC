@@ -9,7 +9,6 @@ import java.net.Socket;
 import java.net.SocketException;
 import java.util.Random;
 
-import java.util.HashMap;
 import java.util.List;
 import java.net.InetSocketAddress;
 
@@ -77,12 +76,10 @@ public class FS_Node {
 
             int length = dis.readInt();
             byte[] data = new byte[length];
-
             dis.readFully(data);
-
             nodosDisponveis = Utils.deserializeList(data);
 
-            System.out.println(nodosDisponveis);
+            //Transfer.selectNodes(nodosDisponveis);
         }
         catch(IOException | ClassNotFoundException e){
             e.printStackTrace();
