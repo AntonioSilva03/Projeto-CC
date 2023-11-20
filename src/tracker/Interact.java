@@ -25,15 +25,16 @@ public class Interact implements Runnable{
 
     public void run(){
         int input = s.nextInt();
-        if(input == 0){
-            closeall();
-            FS_Tracker.state = false;
-            try{
-                FS_Tracker.serverSocket.close();
-            }
-            catch(IOException e){
-                System.out.println(e.getMessage());
-            }
+        while(input != 0){
+            input = s.nextInt();
+        }
+        closeall();
+        FS_Tracker.state = false;
+        try{
+            FS_Tracker.serverSocket.close();
+        }
+        catch(IOException e){
+            System.out.println(e.getMessage());
         }
     }
 }
