@@ -12,6 +12,7 @@ import java.net.InetSocketAddress;
 
 public class Utils {
     public static final int DEFAULT_PORT = 9090;
+    public static final int BLOCK_SIZE = 5; //KB
 
     public static boolean checkConnection(DataOutputStream dos){
         try{

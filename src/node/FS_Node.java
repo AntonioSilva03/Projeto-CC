@@ -79,7 +79,7 @@ public class FS_Node {
             dis.readFully(data);
             nodosDisponveis = Utils.deserializeList(data);
 
-            //Transfer.selectNodes(nodosDisponveis);
+            Transfer.selectNodes(nodosDisponveis);
         }
         catch(IOException | ClassNotFoundException e){
             e.printStackTrace();
