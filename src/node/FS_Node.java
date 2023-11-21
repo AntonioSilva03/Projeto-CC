@@ -7,7 +7,6 @@ import java.io.IOException;
 import java.net.DatagramSocket;
 import java.net.Socket;
 import java.net.SocketException;
-import java.util.Random;
 
 import java.util.List;
 import java.net.InetSocketAddress;
@@ -15,7 +14,6 @@ import java.net.InetSocketAddress;
 import utils.*;
 
 public class FS_Node {
-    private static Random random = new Random();
     private static Socket tcpSocket;
     private static DatagramSocket udpSocket;
     private static DataInputStream dis;
@@ -27,7 +25,7 @@ public class FS_Node {
         try{
             tcpSocket = new Socket("10.0.0.10", Utils.DEFAULT_PORT);
             try{
-                udpSocket = new DatagramSocket(Utils.DEFAULT_PORT /* +random.nextInt(101)*/); // Adiciona um número entre 1 e 100 à porta para iniciar vários nodes na mesma máquina.
+                udpSocket = new DatagramSocket(Utils.DEFAULT_PORT);
             }
             catch(SocketException e){
                 System.out.println("Impossível iniciar conexão para seed");
