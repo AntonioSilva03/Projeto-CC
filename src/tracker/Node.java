@@ -1,14 +1,15 @@
 package tracker;
 
 import java.net.InetSocketAddress;
+import java.util.HashMap;
 import java.util.List;
 
 public class Node {
     private InetSocketAddress address;
-    private List<String> files;
+    private HashMap<String, Integer> files;
     private Handler connection;
 
-    public Node(InetSocketAddress address, List<String> files, Handler connection){
+    public Node(InetSocketAddress address, HashMap<String, Integer> files, Handler connection){
         this.address = address;
         this.files = files;
         this.connection = connection;
@@ -18,7 +19,11 @@ public class Node {
         return this.connection;
     }
 
-    public List<String> getFiles(){
+    public HashMap<String, Integer> getFiles(){
         return this.files;
+    }
+
+    public int getChunk(String file){
+        return this.files.get(file);
     }
 }

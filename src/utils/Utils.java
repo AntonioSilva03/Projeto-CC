@@ -8,11 +8,12 @@ import java.io.ObjectOutputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectInput;
 import java.util.List;
+import java.util.Map;
 import java.net.InetSocketAddress;
 
 public class Utils {
     public static final int DEFAULT_PORT = 9090;
-    public static final int BLOCK_SIZE = 5; //KB
+    public static final int BLOCK_SIZE = 5000; //tamanho em bytes
 
     public static boolean checkConnection(DataOutputStream dos){
         try{
@@ -41,5 +42,28 @@ public class Utils {
         List<InetSocketAddress> addresses = (List<InetSocketAddress>) in.readObject();
 
         return addresses;
+    }
+
+    public static byte[] serializeMap(Map<String, Integer> map) throws IOException {
+        ByteArrayOutputStream bos = new ByteArrayOutputStream();
+        ObjectOutputStream out = new ObjectOutputStream(bos);
+        out.writeObject(map);
+        byte[] serializedData = bos.toByteArray();
+        return serializedData;
+    }
+
+    @SuppressWarnings("unchecked")
+    public static Map<String, Integer> deserializeMap(byte[] data){
+        Map<String, Integer> map = null;
+        try{
+            ByteArrayInputStream bis = new ByteArrayInputStream(data);
+            ObjectInput in = new ObjectInputStream(bis);
+
+            map = (Map<String, Integer>) in.readObject();
+        }
+        catch(IOException | ClassNotFoundException e){
+            e.printStackTrace();
+        }
+        return map;
     }
 }

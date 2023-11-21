@@ -6,6 +6,8 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 
+import utils.Utils;
+
 public class Manager {
     public HashMap<InetSocketAddress, Node> nodes;
 
@@ -13,8 +15,8 @@ public class Manager {
         nodes = new HashMap<>();
     }
 
-    public void registerNode(InetSocketAddress address, String[] request, Handler connection){
-        List<String> files = new ArrayList<>(Arrays.asList(request));
+    public void registerNode(InetSocketAddress address, byte[] request, Handler connection){
+        HashMap<String, Integer> files = new HashMap<>(Utils.deserializeMap(request));
         nodes.put(address, new Node(address, files, connection));
     }
 
@@ -25,10 +27,14 @@ public class Manager {
     public List<InetSocketAddress> getNodesFile(String file){
         List<InetSocketAddress> disponiveis = new ArrayList<>();
         this.nodes.forEach((address, node) -> {
-            if(node.getFiles().contains(file)){
+            if(node.getFiles().containsKey(file)){
                 disponiveis.add(address);
             }
         });
         return disponiveis;
+    }
+
+    public int getChunks(InetSocketAddress address, String file){
+        return nodes.get(address).getChunk(file);
     }
 }

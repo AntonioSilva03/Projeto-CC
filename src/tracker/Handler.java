@@ -27,7 +27,9 @@ public class Handler implements Runnable {
 
     public void register() throws IOException{
         int portaUDP = dis.readInt();
-        String[] initRequest = dis.readUTF().split(" ");
+        int length = dis.readInt();
+        byte[] initRequest = new byte[length];
+        dis.readFully(initRequest);
         clientAddress = new InetSocketAddress(clientSocket.getInetAddress(), portaUDP);
         manager.registerNode(clientAddress, initRequest, this);
     }
@@ -47,6 +49,12 @@ public class Handler implements Runnable {
             dos.flush();
             dos.write(serialized);
             dos.flush();
+
+            if(disponiveis.size() > 0){
+                int chunks = manager.getChunks(disponiveis.get(0), file);
+                dos.writeInt(chunks);
+                dos.flush();
+            }
         }
         catch(IOException e){
             e.printStackTrace();

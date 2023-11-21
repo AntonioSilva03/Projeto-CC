@@ -42,10 +42,14 @@ public class FS_Node {
             System.exit(0);
         }
 
-        sharedFiles = new File(filepath);
         dos.writeInt(udpSocket.getLocalPort());
         dos.flush();
-        dos.writeUTF(String.join(" ", sharedFiles.list()));
+
+        sharedFiles = new File(filepath);
+
+        byte[] serializedSharedFiles = Utils.serializeMap(Chunks.getChunks(filepath, sharedFiles));
+        dos.writeInt(serializedSharedFiles.length);
+        dos.write(serializedSharedFiles);
         dos.flush();
     }
     public static void disconnect(){
@@ -79,7 +83,10 @@ public class FS_Node {
             dis.readFully(data);
             nodosDisponveis = Utils.deserializeList(data);
 
-            Transfer.selectNodes(nodosDisponveis);
+            if(nodosDisponveis.size() > 0) {
+                int chunks = dis.readInt();
+                Transfer.selectNodes(nodosDisponveis, chunks);
+            }
         }
         catch(IOException | ClassNotFoundException e){
             e.printStackTrace();
