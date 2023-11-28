@@ -26,6 +26,41 @@ public class Utils {
         }
     }
 
+    public static byte[] serializeString(String list) throws IOException{
+        ByteArrayOutputStream bos = new ByteArrayOutputStream();
+        ObjectOutputStream out = new ObjectOutputStream(bos);
+        out.writeObject(list);
+        byte[] serializedData = bos.toByteArray();
+        return serializedData;
+    }
+
+    public static String deserializeString(byte[] data) throws ClassNotFoundException, IOException{
+        ByteArrayInputStream bis = new ByteArrayInputStream(data);
+        ObjectInputStream in = new ObjectInputStream(bis);
+
+        String addresses = (String) in.readObject();
+
+        return addresses;
+    }
+
+    public static byte[] serializeListBytes(List<byte[]> list) throws IOException{
+        ByteArrayOutputStream bos = new ByteArrayOutputStream();
+        ObjectOutputStream out = new ObjectOutputStream(bos);
+        out.writeObject(list);
+        byte[] serializedData = bos.toByteArray();
+        return serializedData;
+    }
+
+    @SuppressWarnings("unchecked")
+    public static List<byte[]> deserializeListBytes(byte[] data) throws ClassNotFoundException, IOException{
+        ByteArrayInputStream bis = new ByteArrayInputStream(data);
+        ObjectInput in = new ObjectInputStream(bis);
+
+        List<byte[]> addresses = (List<byte[]>) in.readObject();
+
+        return addresses;
+    }
+
     public static byte[] serializeList(List<InetSocketAddress> list) throws IOException{
         ByteArrayOutputStream bos = new ByteArrayOutputStream();
         ObjectOutputStream out = new ObjectOutputStream(bos);

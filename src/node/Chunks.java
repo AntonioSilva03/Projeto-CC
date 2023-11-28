@@ -17,6 +17,6 @@ public class Chunks {
     }
 
     public static int calculateChunks(String filepath, String f){
-        return (int)(new File(filepath + "/" + f)).length() / Utils.BLOCK_SIZE;
+        return (int)(new File(filepath + "/" + f).length() / Utils.BLOCK_SIZE) + 1; // Um bloco extra para casos em que sobram bytes que nao formam um bloco completo.
     }
 }

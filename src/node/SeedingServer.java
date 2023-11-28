@@ -19,7 +19,8 @@ public class SeedingServer implements Runnable{
             DatagramPacket request = new DatagramPacket(recieveData, recieveData.length);
             try{
                 udpSocket.receive(request);
-                Thread handleRequest = new Thread(new NodeHandler(request));
+                Thread handleRequest = new Thread(new NodeHandler(request, udpSocket));
+                handleRequest.start();
             }
             catch(IOException e){
                 System.out.println(e.getMessage());
