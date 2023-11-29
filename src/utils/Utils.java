@@ -13,7 +13,8 @@ import java.net.InetSocketAddress;
 
 public class Utils {
     public static final int DEFAULT_PORT = 9090;
-    public static final int BLOCK_SIZE = 5000; //tamanho em bytes
+    public static final int BLOCK_SIZE = 5000; // Tamanho em bytes
+    public static final int MARGEM_ERRO = 500; // Margem de erro para bytes das próprias estruturas
 
     public static boolean checkConnection(DataOutputStream dos){
         try{

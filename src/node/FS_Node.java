@@ -110,6 +110,9 @@ public class FS_Node {
         }
     }
     public static void requestDownload(String pedido){
+        if (chunkFiles.containsKey(pedido)) {
+            return;
+        }
         List<InetSocketAddress> nodosDisponveis;
         try{
             dos.writeUTF("REQUEST " + pedido);

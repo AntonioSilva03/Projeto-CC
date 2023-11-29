@@ -23,13 +23,9 @@ public class NodeHandler implements Runnable{
     }
 
     public List<byte[]> readFile(String file, int startOffset, int endOffset){
-        List<byte[]> chunksPedidas = new ArrayList<>();
-
         List<byte[]> chunks = FS_Node.splittedFiles.get(file);
 
-        for(int i = startOffset; i < endOffset; i++){
-            chunksPedidas.add(chunks.get(i));
-        }
+        List<byte[]> chunksPedidas = new ArrayList<>(chunks.subList(startOffset, endOffset));
         return chunksPedidas;
     }
 

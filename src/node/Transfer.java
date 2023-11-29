@@ -14,11 +14,11 @@ import java.io.IOException;
 import java.net.DatagramPacket;
 
 public class Transfer {
-    private static int chunksPublic;
     public static void handleResponse(String file, DatagramPacket response, int startOffset, int endOffset) throws ClassNotFoundException, IOException{
-        List<byte[]> chunks = Utils.deserializeListBytes(response.getData());
+        byte[] recieved = response.getData();
+        List<byte[]> chunks = Utils.deserializeListBytes(recieved);
 
-        if(FS_Node.splittedFiles.containsKey(file) && FS_Node.splittedFiles.size() < chunksPublic){
+        if(FS_Node.splittedFiles.containsKey(file)){
             for(int i = startOffset, j = 0; i < endOffset; i++, j++){
                 FS_Node.splittedFiles.get(file).add(i, chunks.get(j));
             }
@@ -36,7 +36,7 @@ public class Transfer {
     public static void pedido(String file, DatagramPacket sender, int startOffset, int endOffset){
         try{
             DatagramSocket socketAux = new DatagramSocket();
-            byte[] data = new byte[(endOffset - startOffset) * Utils.BLOCK_SIZE];
+            byte[] data = new byte[(endOffset - startOffset) * Utils.BLOCK_SIZE + Utils.MARGEM_ERRO];
             DatagramPacket reciever = new DatagramPacket(data, data.length);
 
             socketAux.send(sender);
@@ -67,7 +67,6 @@ public class Transfer {
     }
 
     public static void selectNodes(String file, List<InetSocketAddress> nodosDisponveis, int chunks){
-        chunksPublic = chunks;
         int chunkAtual = 0;
 
         int chunkPorNodo = chunks / nodosDisponveis.size();
