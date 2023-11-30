@@ -197,4 +197,19 @@ public class FS_Node {
             e.printStackTrace();
         }
     }
+
+    public static void updateFile(String file){
+        try{
+            FileOutputStream updateFile = new FileOutputStream(filepath + "/" + file);
+
+            List<byte[]> bytesFicheiro = splittedFiles.get(file);
+            for(byte[] bloco: bytesFicheiro){
+                updateFile.write(bloco);
+            }
+            updateFile.close();
+        }
+        catch(IOException e){
+            e.printStackTrace();
+        }
+    }
 }
