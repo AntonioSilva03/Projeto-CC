@@ -8,7 +8,9 @@ import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.net.Socket;
 import java.util.List;
-
+/**
+ * Classe que recebe e lida com pedidos de um cliente conectado ao servidor
+ */
 public class Handler implements Runnable {
     private Socket clientSocket;
     private Manager manager;
@@ -18,6 +20,12 @@ public class Handler implements Runnable {
 
     private boolean end = false;
 
+    /**
+     * Função que inicializa um handler para pedidos do cliente.
+     * @param clientSocket Socket para comunicações com o cliente
+     * @param manager Base de dados da rede
+     * @throws IOException
+     */
     public Handler(Socket clientSocket, Manager manager) throws IOException{
         this.clientSocket = clientSocket;
         this.manager = manager;
@@ -25,6 +33,10 @@ public class Handler implements Runnable {
         this.dos = new DataOutputStream(clientSocket.getOutputStream());
     }
 
+    /**
+     * Função que regista um cliente na sua base de dados
+     * @throws IOException
+     */
     public void register() throws IOException{
         int portaUDP = dis.readInt();
         int length = dis.readInt();
@@ -34,6 +46,10 @@ public class Handler implements Runnable {
         manager.registerNode(clientAddress, initRequest, this);
     }
 
+    /**
+     * Função que desconecta um cliente do servidor de forma limpa.
+     * @throws IOException
+     */
     public void quit() throws IOException{
         end = true;
         dis.close();
@@ -41,6 +57,10 @@ public class Handler implements Runnable {
         clientSocket.close();
     }
 
+    /**
+     * Função que recolhe todos os nodos disponíveis para partilha de um ficheiro e informa o cliente
+     * @param file Ficheiro pedido
+     */
     public void getNodes(String file){
         List<InetSocketAddress> disponiveis = manager.getNodesFile(file);
         try{
@@ -61,6 +81,9 @@ public class Handler implements Runnable {
         }
     }
 
+    /**
+     * Função que recebe os pedidos do cliente
+     */
     public void run(){
         try{
             register();

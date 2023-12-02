@@ -6,6 +6,10 @@ import java.net.Socket;
 
 import utils.Utils;
 
+/**
+ * Classe principal do servidor
+ * Responsável por receber conexões e criar handlers para cada cliente conectado.
+ */
 public class FS_Tracker {
     public static boolean state = true;
     public static ServerSocket serverSocket;
