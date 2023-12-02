@@ -12,8 +12,19 @@ import java.net.InetSocketAddress;
 import java.net.DatagramSocket;
 import java.io.IOException;
 import java.net.DatagramPacket;
-
+/**
+ * Classe que trata de toda a lógica por trás do pedido e recolha da transferência do ficheiro pretendido.
+ */
 public class Transfer {
+    /**
+     * Função que trata de lidar com a resposta do cliente a quem pediu um ficheiro ou blocos de um ficheiro
+     * @param file Ficheiro que foi pedido
+     * @param response Pacote recebido
+     * @param startOffset Primeiro bloco pedido
+     * @param endOffset Último bloco pedido
+     * @throws ClassNotFoundException
+     * @throws IOException
+     */
     public static void handleResponse(String file, DatagramPacket response, int startOffset, int endOffset) throws ClassNotFoundException, IOException{
         byte[] recieved = response.getData();
         List<byte[]> chunks = Utils.deserializeListBytes(recieved);
@@ -52,6 +63,13 @@ public class Transfer {
             FS_Node.splittedFiles.notifyAll();
         }
     }
+    /**
+     * Função que trata de efetuar o pedido de blocos a um cliente e que também recebe a resposta.
+     * @param file Ficheiro pretendido
+     * @param sender Pacote com o pedido de blocos
+     * @param startOffset Primeiro bloco pedido
+     * @param endOffset Último bloco pedido
+     */
     public static void pedido(String file, DatagramPacket sender, int startOffset, int endOffset){
         try{
             DatagramSocket socketAux = new DatagramSocket();
@@ -71,6 +89,13 @@ public class Transfer {
         }
     }
 
+    /**
+     * Função que prepara o pacote de pedido de blocos
+     * @param file Ficheiro pedido
+     * @param nodoAtual Endereço do cliente ao qual se pretende pedir blocos
+     * @param startOffset Primeiro bloco pedido
+     * @param endOffset Último bloco pedido
+     */
     public static void preparePedido(String file, InetSocketAddress nodoAtual, int startOffset, int endOffset){
         String data = new String(file + " " + startOffset + " " + endOffset);
         try{
@@ -84,7 +109,12 @@ public class Transfer {
             e.printStackTrace();
         }
     }
-
+    /**
+     * Função que seleciona os blocos que serão pedidos a cada um dos nodos
+     * @param file Ficheiro pedido
+     * @param nodosDisponveis Todos os clientes disponíveis para partilhar o ficheiro pedido
+     * @param chunks Quantidade de blocos em que o servidor está dividido
+     */
     public static void selectNodes(String file, List<InetSocketAddress> nodosDisponveis, int chunks){
         int chunkAtual = 0;
 
@@ -104,6 +134,9 @@ public class Transfer {
         }
     }
 
+    /**
+     * Classe auxíliar para guardar informações que as várias threads precisam para efetuarem pedidos em paralelo.
+     */
     static class NewRunnable implements Runnable{
         private String file;
         private InetSocketAddress address;

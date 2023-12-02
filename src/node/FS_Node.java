@@ -16,7 +16,9 @@ import java.util.List;
 import java.net.InetSocketAddress;
 
 import utils.*;
-
+/**
+ * Classe principal do programa-cliente.
+ */
 public class FS_Node {
     private static Socket tcpSocket;
     private static DatagramSocket udpSocket;
@@ -26,6 +28,12 @@ public class FS_Node {
     private static File sharedFiles;
     private static HashMap<String, Integer> chunkFiles;
     public static HashMap<String, List<byte[]>> splittedFiles;
+    /**
+     * Função que divide um ficheiro nos seus respetivos blocos e guarda-os numa lista.
+     * @param file Ficheiro que se pretende dividir.
+     * @param chunks Número de chunks que se pretende dividir o ficheiro.
+     * @return Lista com parcelas de um ficheiro representadas em bytes.
+     */
 
     public static List<byte[]> getFileOutputStream(File file, int chunks){
         List<byte[]> streamList = new ArrayList<>();
@@ -48,6 +56,9 @@ public class FS_Node {
         return streamList;
     }
 
+    /**
+     * Função que divide os ficheiros disponíveis para seeding em blocos.
+     */
     public static void splitFiles(){
         splittedFiles = new HashMap<>();
 
@@ -58,6 +69,10 @@ public class FS_Node {
         });
     }
 
+    /**
+     * Função que efetua o registo do cliente e comunica ao servidor a sua presença bem como os ficheiros que disponibiliza
+     * @throws IOException
+     */
     public static void register() throws IOException{
         try{
             tcpSocket = new Socket("10.0.0.10", Utils.DEFAULT_PORT);
@@ -89,6 +104,9 @@ public class FS_Node {
         dos.write(serializedSharedFiles);
         dos.flush();
     }
+    /**
+     * Função que trata da desconexão do cliente, fecho dos sockets e dos processos auxiliares.
+     */
     public static void disconnect(){
         try{
             SeedingServer.setState(false);
@@ -99,16 +117,23 @@ public class FS_Node {
             e.printStackTrace();
         }
     }
+    /**
+     * Função que comunica ao servidor que o cliente vai se desconectar.
+     */
     public static void quit(){
         try{
             dos.writeUTF("QUIT");
             dos.flush();
             disconnect();
         }
-        catch(IOException e){
+        catch(IOException e){ // Caso em que o servidor fechou enquanto o cliente ainda se encontra conectado, logo a comunicação não é possível.
             disconnect();
         }
     }
+    /**
+     * Função que pede ao servidor os nodos disponíveis para download do ficheiro pedido.
+     * @param pedido Ficheiro pedido.
+     */
     public static void requestDownload(String pedido){
         if (chunkFiles.containsKey(pedido)) {
             return;
@@ -127,12 +152,17 @@ public class FS_Node {
                 int chunks = dis.readInt();
                 Transfer.selectNodes(pedido, nodosDisponveis, chunks);
             }
+            else return;
             System.out.println("Ficheiro transferido com sucesso\n");
         }
         catch(IOException | ClassNotFoundException e){
             e.printStackTrace();
         }
     }
+    /**
+     * Função principal do programa
+     * @param args Obrigatoriamente deve incluir o caminho para os ficheiros disponíveis para partilha.
+     */
     public static void main(String[] args) {
         filepath = args[0];
         try{
@@ -170,19 +200,31 @@ public class FS_Node {
         }
         System.out.println("Conexão ao servidor perdida");
     }
-
+    /**
+     * Função que fornece os ficheiros que está a partilhar
+     * @return Devolve uma referência para todos os ficheiros que estão a ser partilhados
+     */
     public static File getFiles(){
         return sharedFiles;
     }
-
+    /**
+     * Função que fornece o caminho para a pasta de partilha
+     * @return Caminho para a pasta de partilha
+     */
     public static String getFilepath(){
         return filepath;
     }
-
+    /**
+     * Função que devolve o socket UDP principal do cliente.
+     * @return Socket UDP principal do cliente.
+     */
     public static DatagramSocket getUdpSocket(){
         return udpSocket;
     }
-
+    /**
+     * Função que adiciona um ficheiro novo à pasta de partilha de ficheiros.
+     * @param file Nome do ficheiro novo para partilha.
+     */
     public static void addNewFile(String file){
         try{
             FileOutputStream novoFile = new FileOutputStream(filepath + "/" + file);
@@ -197,7 +239,10 @@ public class FS_Node {
             e.printStackTrace();
         }
     }
-
+    /**
+     * Função que atualiza um ficheiro já existente com blocos novos.
+     * @param file Nome do ficheiro a ser atualizado.
+     */
     public static void updateFile(String file){
         try{
             FileOutputStream updateFile = new FileOutputStream(filepath + "/" + file);
