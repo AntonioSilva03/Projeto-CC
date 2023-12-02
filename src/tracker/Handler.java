@@ -98,6 +98,12 @@ public class Handler implements Runnable {
                 else if(request[0].equals("REQUEST")){
                     getNodes(request[1]);
                 }
+                else if(request[0].equals("UPDATE")){
+                    int length = dis.readInt();
+                    byte[] initRequest = new byte[length];
+                    dis.readFully(initRequest);
+                    manager.updateNode(clientAddress, initRequest);
+                }
             }
         }
         catch(IOException e){

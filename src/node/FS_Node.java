@@ -10,6 +10,8 @@ import java.io.IOException;
 import java.net.DatagramSocket;
 import java.net.Socket;
 import java.net.SocketException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -69,6 +71,13 @@ public class FS_Node {
         });
     }
 
+    public static void updateServer(HashMap<String, Integer> chunks) throws IOException{
+        dos.writeUTF("UPDATE");
+        byte[] serializedSharedFiles = Utils.serializeMap(chunkFiles);
+        dos.writeInt(serializedSharedFiles.length);
+        dos.write(serializedSharedFiles);
+        dos.flush();
+    }
     /**
      * Função que efetua o registo do cliente e comunica ao servidor a sua presença bem como os ficheiros que disponibiliza
      * @throws IOException
@@ -151,6 +160,9 @@ public class FS_Node {
             if(nodosDisponveis.size() > 0) {
                 int chunks = dis.readInt();
                 Transfer.selectNodes(pedido, nodosDisponveis, chunks);
+
+                chunkFiles.put(pedido, chunks);
+                updateServer(chunkFiles);
             }
             else return;
             System.out.println("Ficheiro transferido com sucesso\n");
@@ -192,6 +204,10 @@ public class FS_Node {
                 System.out.println("Ficheiros partilhados: " + String.join(" ", sharedFiles.list()) + "\n");
             }
             else if(op == 3){
+                String ficheiro = UI.menuApagar();
+                apagaFile(ficheiro);
+            }
+            else if(op == 4){
                 end = true;
                 quit();
                 System.out.println("Desconectado com sucesso");
@@ -255,6 +271,24 @@ public class FS_Node {
         }
         catch(IOException e){
             e.printStackTrace();
+        }
+    }
+
+    public static void apagaFile(String ficheiro){
+        if(!splittedFiles.containsKey(ficheiro)){
+            System.out.println("Ficheiro não existe na pasta partilhada");
+        }
+        else{
+            try{
+                splittedFiles.remove(ficheiro);
+                chunkFiles.remove(ficheiro);
+                Files.delete(Paths.get(filepath + "/" + ficheiro));
+                sharedFiles = new File(filepath);
+                updateServer(chunkFiles);
+            }
+            catch(IOException e){
+                e.printStackTrace();
+            }
         }
     }
 }

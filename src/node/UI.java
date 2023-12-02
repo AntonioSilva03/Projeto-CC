@@ -15,7 +15,8 @@ public class UI {
         System.out.println("----------Peer-to-peer service----------\n");
         System.out.println("1. Download");
         System.out.println("2. Ficheiros partilhados");
-        System.out.println("3. Sair\n");
+        System.out.println("3. Apagar ficheiro");
+        System.out.println("4. Sair\n");
         return s.nextInt();
     }
 
@@ -26,6 +27,12 @@ public class UI {
     public static String menuDownload(){
         s.nextLine();
         System.out.println("Que ficheiro deseja baixar?\n");
+        return s.nextLine();
+    }
+
+    public static String menuApagar(){
+        s.nextLine();
+        System.out.println("Que ficheiro deseja apagar");
         return s.nextLine();
     }
 }

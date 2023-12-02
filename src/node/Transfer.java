@@ -127,8 +127,14 @@ public class Transfer {
         }
         int i = 0;
         while(missingChunks > 0){
-            Thread t = new Thread(new NewRunnable(file, nodosDisponveis.get(i), chunkAtual, (chunkAtual = chunkAtual + chunkPorNodo)));
-            t.start();
+            if(missingChunks >= chunkPorNodo){
+                Thread t = new Thread(new NewRunnable(file, nodosDisponveis.get(i), chunkAtual, (chunkAtual = chunkAtual + chunkPorNodo)));
+                t.start();
+            }
+            else{
+                Thread t = new Thread(new NewRunnable(file, nodosDisponveis.get(i), chunkAtual, (chunkAtual = chunkAtual + missingChunks)));
+                t.start();
+            }
             i++;
             missingChunks -= chunkPorNodo;
         }

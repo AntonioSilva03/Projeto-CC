@@ -65,4 +65,11 @@ public class Manager {
     public int getChunks(InetSocketAddress address, String file){
         return nodes.get(address).getChunk(file);
     }
+
+    public void updateNode(InetSocketAddress address, byte[] request){
+        HashMap<String, Integer> newFiles = new HashMap<>(Utils.deserializeMap(request));
+        Node alterado = nodes.get(address);
+        alterado.setFiles(newFiles);
+        nodes.put(address, alterado);
+    }
 }

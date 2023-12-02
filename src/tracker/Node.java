@@ -48,4 +48,8 @@ public class Node {
     public int getChunk(String file){
         return this.files.get(file);
     }
+
+    public void setFiles(HashMap<String, Integer> newFiles){
+        this.files = newFiles;
+    }
 }
