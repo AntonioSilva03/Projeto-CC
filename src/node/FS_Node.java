@@ -71,6 +71,11 @@ public class FS_Node {
         });
     }
 
+    /**
+     * Função que informa o servidor de atualizações do cliente.
+     * @param chunks Novos dados da pasta partilhada.
+     * @throws IOException
+     */
     public static void updateServer(HashMap<String, Integer> chunks) throws IOException{
         dos.writeUTF("UPDATE");
         byte[] serializedSharedFiles = Utils.serializeMap(chunkFiles);
@@ -274,6 +279,10 @@ public class FS_Node {
         }
     }
 
+    /**
+     * Função que trata da eliminação de um ficheiro da pasta partilhada.
+     * @param ficheiro Ficheiro a ser eliminado.
+     */
     public static void apagaFile(String ficheiro){
         if(!splittedFiles.containsKey(ficheiro)){
             System.out.println("Ficheiro não existe na pasta partilhada");

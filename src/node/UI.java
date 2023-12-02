@@ -21,7 +21,7 @@ public class UI {
     }
 
     /**
-     * Função que imprime o menu de downliad e recolhe o nome do ficheiro pretendido.
+     * Função que imprime o menu de download e recolhe o nome do ficheiro pretendido.
      * @return Nome do ficheiro pretendido para download.
      */
     public static String menuDownload(){
@@ -30,6 +30,10 @@ public class UI {
         return s.nextLine();
     }
 
+    /**
+     * Função que imprime o menu de eliminação de ficheiro.
+     * @return Nome do ficheiro a eliminar.
+     */
     public static String menuApagar(){
         s.nextLine();
         System.out.println("Que ficheiro deseja apagar");

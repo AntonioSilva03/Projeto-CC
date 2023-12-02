@@ -49,6 +49,10 @@ public class Node {
         return this.files.get(file);
     }
 
+    /**
+     * Função que altera as informações de um nodo.
+     * @param newFiles Novas informações.
+     */
     public void setFiles(HashMap<String, Integer> newFiles){
         this.files = newFiles;
     }

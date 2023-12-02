@@ -66,6 +66,11 @@ public class Manager {
         return nodes.get(address).getChunk(file);
     }
 
+    /**
+     * Função que pede atualização das informações de um nodo
+     * @param address Endereço do nodo a atualizar.
+     * @param request Novas informações serializadas.
+     */
     public void updateNode(InetSocketAddress address, byte[] request){
         HashMap<String, Integer> newFiles = new HashMap<>(Utils.deserializeMap(request));
         Node alterado = nodes.get(address);
