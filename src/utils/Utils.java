@@ -18,6 +18,7 @@ public class Utils {
     public static final int DEFAULT_PORT = 9090; // Porta genérica que todos os sockets se conectam se possível.
     public static final int BLOCK_SIZE = 5000; // Tamanho em bytes de um bloco.
     public static final int MARGEM_ERRO = 500; // Margem de erro de espaço para bytes das próprias estruturas.
+    public static final int SOCKET_LIMIT = 65535 / BLOCK_SIZE;
 
     /**
      * Função que envia pacotes periódicos ao servidor para verificar conexão.

@@ -119,6 +119,9 @@ public class Transfer {
         int chunkAtual = 0;
 
         int chunkPorNodo = chunks / nodosDisponveis.size();
+        if(chunkPorNodo > Utils.SOCKET_LIMIT){
+            chunkPorNodo = Utils.SOCKET_LIMIT;
+        }
         int missingChunks = chunks - (chunkPorNodo * nodosDisponveis.size());
 
         for(InetSocketAddress address : nodosDisponveis){
@@ -136,6 +139,9 @@ public class Transfer {
                 t.start();
             }
             i++;
+            if(i == nodosDisponveis.size()){
+                i = 0;
+            }
             missingChunks -= chunkPorNodo;
         }
     }
