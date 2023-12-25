@@ -1,0 +1,15 @@
+TUDO DENTRO DA PASTA SRC
+
+Para compilar o código fazer:
+
+javac utils/Utils.java
+javac -cp .:utils/ node/*.java
+javac -cp .:utils/ tracker/*.java
+
+Para inicializar o servidor na topologia, fazer este código no server:
+
+java tracker/FS_Tracker
+
+Para inicializar um nodo na topologia, fazer este código num nodo:
+
+java node/FS_Node ../shared/nodeX
